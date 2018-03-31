@@ -1,0 +1,26 @@
+﻿'DELEGADOS:
+'(Cuando mas de un objeto puede querer acceder a otro objeto a la vez)
+
+'En arranque
+
+Private Sub ClienteFSX_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    
+	CheckForIllegalCrossThreadCalls = False
+    AddHandler LOGGENERAL.Mensaje, AddressOf Recibir_Mensaje
+    
+End Sub
+
+
+
+
+Private Sub Dibujar_Equipo(PARAMETRO_1 As String, PARAMETRO_2 As Color)
+        Dim Elemento As Label = Nothing
+        Elemento = Me.LaMediador 'objeto al que se apunta
+
+        If Elemento.InvokeRequired Then 'Aqui vemos por quien ha sido invocado el listbox
+            Dim OBJETO As New DELEGADO_USAR(AddressOf Dibujar_Equipo)
+            Invoke(OBJETO, New Object() {PARAMETRO_1, PARAMETRO_2})
+        Else
+            Elemento.BackColor = Color
+        End If
+    End Sub
